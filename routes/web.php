@@ -11,11 +11,13 @@
 |
 */
 
-//Route::get('/', function () {
-//    phpinfo();
-//});
-Route::get('/','Test\TestController@test');
+Route::get('/', function () {
+    phpinfo();
+});
+//Route::get('/','Test\TestController@test');
 
 Route::get('/oss/text','OSS\OSSController@text');
 
 Route::get('/oss/file','OSS\OSSController@uploadFile');
+//上传到oss
+Route::get('/ofile','Cron\CronController@uploadFile');
