@@ -38,7 +38,6 @@ class CronController extends Controller
             }
             echo "文件上传成功：".$address;
             unlink($address);
-            die;
         }
     }
 }

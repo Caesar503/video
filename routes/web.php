@@ -21,3 +21,5 @@ Route::get('/oss/text','OSS\OSSController@text');
 Route::get('/oss/file','OSS\OSSController@uploadFile');
 //上传到oss
 Route::get('/ofile','Cron\CronController@uploadFile');
+//视频详情展示
+Route::get('/detail/{id}','Det\DetController@show');
