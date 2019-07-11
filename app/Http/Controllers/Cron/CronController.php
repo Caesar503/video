@@ -31,7 +31,7 @@ class CronController extends Controller
 
             try {
                 //上传
-                $res = $ossClient->uploadFile(env('BUCKET'),'img/'.$filename,$address);
+                $res = $ossClient->uploadFile(env('BUCKET'),'files/'.$filename,$address);
             } catch (OssException $e) {
                 //抛出异常
                 print $e->getMessage();
