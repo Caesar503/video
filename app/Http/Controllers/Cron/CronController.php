@@ -27,7 +27,7 @@ class CronController extends Controller
             $address = storage_path('app/public/files').'/'.$v;
 
             //上传后的文件名字
-            $filename = substr(rand(1,99999).Str::random(9),3,8).'.'.$suffix;
+            $filename = $v;
 
             try {
                 //上传
