@@ -23,3 +23,8 @@ Route::get('/oss/file','OSS\OSSController@uploadFile');
 Route::get('/ofile','Cron\CronController@uploadFile');
 //视频详情展示
 Route::get('/detail/{id}','Det\DetController@show');
+
+
+Route::get('/zb', function () {
+    return view('detail.zb');
+});
