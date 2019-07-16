@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use OSS\OssClient;
 use Illuminate\Support\Str;
-class OSSController extends Controller
+class NoController extends Controller
 {
     //上传视频 异步回调
     public function notify()
