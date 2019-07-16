@@ -13,8 +13,8 @@ class NoController extends Controller
     {
         $data = file_get_contents("php://input");
 
-        $log_data = date("Y-M-D h:i:s").">>>>>>>>>>>>>>".$data;
-        file_put_contents('logs/oss.log',$log_data,FILE_APPEND);
+        $log_data = date("Y-M-D h:i:s").">>>>>>>>>>>>>>".$data."\n\n";
+        file_put_contents("logs/oss.log",$log_data,FILE_APPEND);
 
     }
 }
