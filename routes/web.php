@@ -12,7 +12,7 @@
 */
 
 Route::get('/', function () {
-    phpinfo();
+    return view('welcome');
 });
 //Route::get('/','Test\TestController@test');
 
@@ -26,6 +26,8 @@ Route::get('/detail/{id}','Det\DetController@show');
 
 //视频上传 异步回调
 Route::post('/notify/oss','OSS\NoController@notify');
+//测试
+Route::get('/notify/base','OSS\NoController@test');
 
 
 Route::get('/zb', function () {
