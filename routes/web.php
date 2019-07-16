@@ -25,7 +25,7 @@ Route::get('/ofile','Cron\CronController@uploadFile');
 Route::get('/detail/{id}','Det\DetController@show');
 
 //视频上传 异步回调
-Route::post('/notify/oss','OSS\NoController@nofity');
+Route::post('/notify/oss','OSS\NoController@notify');
 
 
 Route::get('/zb', function () {
