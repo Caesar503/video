@@ -23,8 +23,72 @@ class NoController extends Controller
         $fileData = base64_decode($arr['Message'],true);
         $fileDataDe = json_decode($fileData,true);
         $fileName = $fileDataDe['events'][0]['oss']['object']['key'];
-        dump($fileName);
+//        dump($fileName);
+        //创建AcsClient实例 (貌似好像是转码的客户端)
+        $clientProfile = \DefaultProfile::getProfile('cn-beijing',env("ACCESSKEYID"),env("ACCESSKEYSECRET"));
+        $client = new \DefaultAcsClient($clientProfile);
+//        dump($client);
+        //创建request，并设置参数
 
+        $pipeline_id = '020afe1d4eb34e8fa974341b19053fdd';
+        $template_id = 'S00000001-200010';
+        $oss_location = 'oss-cn-beijing';
+        $oss_bucket = $fileDataDe['events'][0]['oss']['bucket']['name'];
+        $oss_input_object = $fileName;
+        $oss_output_object = Str::random(8,14).'.hls';
+
+
+        $request = new Mts\SubmitJobsRequest();
+        $request->setAcceptFormat('JSON');
+        //转码
+        #Input
+        $input = array('Location' => $oss_location,
+            'Bucket' => $oss_bucket,
+            'Object' => urlencode($oss_input_object)
+        );
+        $request->setInput(json_encode($input));
+        #Output
+        $output = array('OutputObject' => urlencode($oss_output_object));
+        //格式
+        $output['Container'] = array('Format' => 'hls');
+        //视频
+        $output['Video'] = array('Codec' =>'H.264',
+            'Bitrate' => 1500,
+            'Width' => 1280,
+            'Fps' => 25);
+        //音频
+        $output['Audio'] = array('Codec' => 'AAC',
+            'Bitrate' => 128,
+            'Channels' => 2,
+            'Samplerate' => 44100);
+        //模板
+        $output['TemplateId'] = $template_id;
+        $outputs = array($output);
+        $request->setOUtputs(json_encode($outputs));
+        $request->setOutputBucket($oss_bucket);
+        $request->setOutputLocation($oss_location);
+        //管道
+        $request->setPipelineId($pipeline_id);
+
+
+        //发起请求处理请求
+        try {
+            $response = $client->getAcsResponse($request);
+            print 'RequestId is:' . $response->{'RequestId'} . "\n";;
+            if ($response->{'JobResultList'}->{'JobResult'}[0]->{'Success'}) {
+                print 'JobId is:' .
+                    $response->{'JobResultList'}->{'JobResult'}[0]->{'Job'}->{'JobId'} . "\n";
+            } else {
+                print 'SubmitJobs Failed code:' .
+                    $response->{'JobResultList'}->{'JobResult'}[0]->{'Code'} .
+                    ' message:' .
+                    $response->{'JobResultList'}->{'JobResult'}[0]->{'Message'} . "\n";
+            }
+        } catch(ServerException $e) {
+            print 'Error: ' . $e->getErrorCode() . ' Message: ' . $e->getMessage() . "\n";
+        } catch(ClientException $e) {
+            print 'Error: ' . $e->getErrorCode() . ' Message: ' . $e->getMessage() . "\n";
+        }
     }
     public function test()
     {
